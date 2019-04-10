@@ -15,14 +15,17 @@ import { getIframeSource, getIframePageContent } from 'components/signup-site-pr
 
 export default class SignupSitePreviewIframe extends Component {
 	static propTypes = {
-		isRtl: PropTypes.bool,
-		langSlug: PropTypes.string,
 		cssUrl: PropTypes.string,
-		fontUrl: PropTypes.string,
 		// Iframe body content
 		content: PropTypes.object,
+		fontUrl: PropTypes.string,
+		isRtl: PropTypes.bool,
+		langSlug: PropTypes.string,
 		onPreviewClick: PropTypes.func,
+		resize: PropTypes.bool,
 		setIsLoaded: PropTypes.func,
+		setWrapperHeight: PropTypes.func,
+		scrolling: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -31,6 +34,9 @@ export default class SignupSitePreviewIframe extends Component {
 		content: {},
 		onPreviewClick: () => {},
 		setIsLoaded: () => {},
+		setWrapperHeight: () => {},
+		resize: false,
+		scrolling: true,
 	};
 
 	constructor( props ) {
@@ -53,24 +59,24 @@ export default class SignupSitePreviewIframe extends Component {
 		}
 
 		if ( this.props.content.title !== nextProps.content.title ) {
-			this.setIframeContent( '.site-builder__title', nextProps.content.title );
+			this.setIframeElementContent( '.site-builder__title', nextProps.content.title );
 			return false;
 		}
 
 		if ( this.props.content.tagline !== nextProps.content.tagline ) {
-			this.setIframeContent( '.site-builder__description', nextProps.content.tagline );
+			this.setIframeElementContent( '.site-builder__description', nextProps.content.tagline );
 			return false;
 		}
 
 		if ( this.props.content.body !== nextProps.content.body ) {
-			this.setIframePageContent( nextProps.content );
+			this.setIframeBodyContent( nextProps.content );
 			return false;
 		}
 
 		return false;
 	}
 
-	setIframePageContent( content ) {
+	setIframeBodyContent( content ) {
 		if ( ! this.iframe.current ) {
 			return;
 		}
@@ -78,10 +84,11 @@ export default class SignupSitePreviewIframe extends Component {
 
 		if ( element ) {
 			element.innerHTML = getIframePageContent( content );
+			this.setContainerHeight();
 		}
 	}
 
-	setIframeContent( selector, content ) {
+	setIframeElementContent( selector, content ) {
 		if ( ! this.iframe.current ) {
 			return;
 		}
@@ -111,10 +118,18 @@ export default class SignupSitePreviewIframe extends Component {
 			.classList.remove( 'is-loading' );
 	};
 
+	setContainerHeight = () => {
+		if ( ! this.iframe.current ) {
+			return;
+		}
+
+		this.props.setWrapperHeight( this.iframe.current.contentWindow.document.body.offsetHeight );
+	};
+
 	setLoaded = () => {
 		this.setOnPreviewClick();
 		this.setIframeIsLoading();
-		this.props.setIsLoaded( true );
+		this.props.resize && this.setContainerHeight();
 	};
 
 	setIframeSource = ( { content, cssUrl, fontUrl, isRtl, langSlug } ) => {
@@ -122,7 +137,14 @@ export default class SignupSitePreviewIframe extends Component {
 			return;
 		}
 
-		const iframeSrc = getIframeSource( content, cssUrl, fontUrl, isRtl, langSlug );
+		const iframeSrc = getIframeSource(
+			content,
+			cssUrl,
+			fontUrl,
+			isRtl,
+			langSlug,
+			this.props.scrolling
+		);
 
 		if ( userAgent.isIE ) {
 			this.iframe.current.contentWindow.document.open();

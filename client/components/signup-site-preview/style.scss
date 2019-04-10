@@ -16,6 +16,7 @@
 
 	&.is-desktop {
 		border-radius: 4px;
+		max-width: 767px;
 		// Side by side layout uses flexbox to show
 		// both mockups next to each other.
 		@include breakpoint( '>960px' ) {
@@ -34,10 +35,14 @@
 
 	&.is-phone {
 		border-radius: 12px;
-		width: 350px;
+		width: 300px;
 		transition-delay: 200ms;
+		height: 468px;
+		padding: 0 0 24px;
+		@include elevation ( 4dp );
+
 		@include breakpoint( '>960px' ) {
-			min-width: 350px;
+			min-width: 300px;
 		}
 		// Grouped layout shows a fixed-height mobile mockup
 		// overlaid on top of the desktop mockup.
@@ -66,14 +71,15 @@
 	height: 100%;
 	position: relative;
 	overflow: hidden;
-	border-radius: 4px;
 
 	.is-desktop & {
 		border-radius: 4px;
+		@include elevation ( 3dp );
 	}
 
 	.is-phone & {
-		border-radius: 12px;
+		border-bottom: 1px solid var( --color-neutral-100 );
+		border-radius: 16px 16px 0 0;
 	}
 
 	.spinner {
@@ -93,10 +99,14 @@
 
 // Browser chrome to make mockups look
 // a little more like a website/phone.
-.signup-site-preview__chrome-desktop {
+
+.signup-site-preview__chrome-desktop,
+.signup-site-preview__chrome-mobile {
 	height: 28px;
 	border-bottom: 1px solid var( --color-neutral-100 );
+}
 
+.signup-site-preview__chrome-desktop {
 	// Desktop chrome has some OS dots to
 	// help signify its a browser.
 	svg {
@@ -125,8 +135,6 @@
 }
 
 .signup-site-preview__chrome-mobile {
-	height: 28px;
-
 	.signup-site-preview__chrome-label {
 		position: relative;
 		top: 6px;

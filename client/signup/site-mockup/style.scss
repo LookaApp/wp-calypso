@@ -7,7 +7,7 @@
 	// Side by side layout uses flexbox to show
 	// both mockups next to each other.
 	@include breakpoint( '>960px' ) {
-		max-width: 1200px;
+		max-width: 1110px;
 		display: flex;
 		align-items: flex-start;
 

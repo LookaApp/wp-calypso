@@ -149,6 +149,7 @@ class SiteMockups extends Component {
 			},
 			langSlug,
 			isRtl,
+			onPreviewClick: this.handleClick,
 		};
 
 		return (
@@ -157,14 +158,11 @@ class SiteMockups extends Component {
 				<div className="site-mockup__devices">
 					<SignupSitePreview
 						defaultViewportDevice="desktop"
+						resize={ true }
+						scrolling={ false }
 						{ ...otherProps }
-						onPreviewClick={ this.handleClick }
 					/>
-					<SignupSitePreview
-						defaultViewportDevice="phone"
-						{ ...otherProps }
-						onPreviewClick={ this.handleClick }
-					/>
+					<SignupSitePreview defaultViewportDevice="phone" { ...otherProps } />
 				</div>
 			</div>
 		);

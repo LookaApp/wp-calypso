@@ -40,9 +40,17 @@ export function getCSSLinkHtml( url ) {
  * @param  {String}  fontUrl   A URL to the font CSS file
  * @param  {Boolean} isRtl     If the current locale is a right-to-left language
  * @param  {String}  langSlug  The slug of the current locale
+ * @param  {Boolean} scrolling Whether to allow scrolling on the body
  * @return {String}            The HTML source.
  */
-export function getIframeSource( content, cssUrl, fontUrl, isRtl = false, langSlug = 'en' ) {
+export function getIframeSource(
+	content,
+	cssUrl,
+	fontUrl,
+	isRtl = false,
+	langSlug = 'en',
+	scrolling = true
+) {
 	const source = `
 		<html lang="${ langSlug }" dir="${ isRtl ? 'rtl' : 'ltr' }">
 		<head>
@@ -55,7 +63,14 @@ export function getIframeSource( content, cssUrl, fontUrl, isRtl = false, langSl
 			${ getCSSLinkHtml( cssUrl ) }
 			${ getCSSLinkHtml( fontUrl ) }
 			<style type="text/css">
-			
+				body {
+					padding-bottom: 25px;
+				}
+				
+				.no-scrolling {
+					overflow: hidden;
+				}
+				
 				.is-loading {
 					position: relative;
 					background: white;
@@ -82,7 +97,9 @@ export function getIframeSource( content, cssUrl, fontUrl, isRtl = false, langSl
 				}
 			</style>
 		</head>
-		<body class="home page-template-default page logged-in is-loading">
+		<body class="home page-template-default page logged-in is-loading ${
+			scrolling ? '' : 'no-scrolling'
+		}">
 			<div id="page" class="site">
 				<div id="content" class="site-content">
 					<section id="primary" class="content-area">

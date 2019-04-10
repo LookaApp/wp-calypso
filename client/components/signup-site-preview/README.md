@@ -19,6 +19,8 @@ This component displays a WordPress.com site preview, used by the signup journey
 		langSlug="en"
 		isRtl={ false }
 		onPreviewClick={ this.handlePreviewClick }
+		resize={ true }
+		scrolling={ false }
 	/>
 					
 ```
@@ -32,11 +34,23 @@ Determines the width and style of the iframe container. Valid values: `desktop` 
 ### _(Object)_ `content`
 Contains the title, tagline and body content in the WordPress.com site preview.
 
+### _(Boolean)_ `resize`
+_Optional_ Whether the iframe container should resize according to the iframe content height.
+
+Default: `false`
+
+### _(Boolean)_ `scrolling`
+_Optional_ Whether the iframe container should scroll overflowing content.
+
+Default: `true`
+
 ### _(String)_ `langSlug`
 Site language, added as to `<html />` as a `lang` attribute
 
 ### _(Boolean)_ `isRtl`
 Whether the language is a right-to-left language. If `true`, we add `"rtl"` to `<html />` as a `dir` attribute. 
+
+Default: `false`
 
 ### _(String)_ `cssUrl`
 Url to a theme CSS file.

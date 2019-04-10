@@ -50,15 +50,17 @@ function MockupChromeDesktop() {
 
 export class SignupSitePreview extends Component {
 	static propTypes = {
+		cssUrl: PropTypes.string,
 		// The viewport device to show initially
 		defaultViewportDevice: PropTypes.oneOf( [ 'desktop', 'phone' ] ),
+		fontUrl: PropTypes.string,
 		isRtl: PropTypes.bool,
 		langSlug: PropTypes.string,
-		cssUrl: PropTypes.string,
-		fontUrl: PropTypes.string,
 		// Iframe body content
 		content: PropTypes.object,
 		onPreviewClick: PropTypes.func,
+		resize: PropTypes.bool,
+		scrolling: PropTypes.bool,
 	};
 
 	static defaultProps = {
@@ -67,12 +69,15 @@ export class SignupSitePreview extends Component {
 		langSlug: 'en',
 		content: {},
 		onPreviewClick: () => {},
+		resize: false,
+		scrolling: true,
 	};
 
 	constructor( props ) {
 		super( props );
 		this.state = {
 			isLoaded: false,
+			wrapperHeight: 800,
 		};
 	}
 
@@ -87,6 +92,7 @@ export class SignupSitePreview extends Component {
 	}
 
 	setIsLoaded = isLoaded => this.setState( { isLoaded } );
+	setWrapperHeight = wrapperHeight => this.setState( { wrapperHeight } );
 
 	render() {
 		const { isDesktop, isPhone } = this.props;
@@ -94,13 +100,20 @@ export class SignupSitePreview extends Component {
 			'is-desktop': isDesktop,
 			'is-phone': isPhone,
 		} );
+		const wrapperHeightStyle = {
+			height: this.state.wrapperHeight,
+		};
 
 		return (
-			<div className={ className }>
+			<div className={ className } style={ this.props.resize ? wrapperHeightStyle : null }>
 				<div className="signup-site-preview__iframe-wrapper">
 					{ isPhone ? <MockupChromeMobile /> : <MockupChromeDesktop /> }
 					{ ! this.state.isLoaded && <Spinner size={ 40 } /> }
-					<SignupSitePreviewIframe { ...this.props } setIsLoaded={ this.setIsLoaded } />
+					<SignupSitePreviewIframe
+						{ ...this.props }
+						setIsLoaded={ this.setIsLoaded }
+						setWrapperHeight={ this.setWrapperHeight }
+					/>
 				</div>
 			</div>
 		);
