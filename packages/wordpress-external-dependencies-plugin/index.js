@@ -34,6 +34,10 @@ class WordPressExternalDependenciesPlugin {
 				externRootRequest = 'ReactDOM';
 				break;
 
+			case 'tinymce/tinymce':
+				externRootRequest = 'tinymce';
+				break;
+
 			default:
 				if ( request.startsWith( WORDPRESS_NAMESPACE ) ) {
 					// @wordpress/api-fetch -> wp.apiFetch
